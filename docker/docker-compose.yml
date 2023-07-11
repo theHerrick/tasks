@@ -17,7 +17,7 @@ services:
       MYSQL_USER: mysqluser
       MYSQL_PASSWORD: password
     networks:
-      - mysql-phpmyadmin
+      - todo-network
 
   # phpmyadmin
   phpmyadmin:
@@ -31,10 +31,10 @@ services:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: password
     networks:
-      - mysql-phpmyadmin
+      - todo-network
 
 networks:
-  mysql-phpmyadmin:
+  todo-network:
 
 volumes:
   db_data:
