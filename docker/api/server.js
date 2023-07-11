@@ -21,6 +21,11 @@ db.connect((err) => {
 const app = express();
 app.use(bodyParser.json());
 
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
+
 // Create a todo
 app.post('/api/todos', (req, res) => {
   const { task } = req.body;
