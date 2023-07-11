@@ -4,6 +4,7 @@ services:
   # Database
   db:
     platform: linux/x86_64
+    container_name: todo-mysqldb
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
@@ -12,10 +13,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: tododb
       MYSQL_USER: mysqluser
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - todo-network
 
@@ -23,13 +24,26 @@ services:
   phpmyadmin:
     depends_on:
       - db
+    container_name: phpmyadmin
     image: phpmyadmin
     restart: always
     ports:
       - "8090:80"
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - todo-network
+
+  todoapi:
+    container_name: todo-api
+    build: 
+      context: ./api
+    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
     networks:
       - todo-network
 
