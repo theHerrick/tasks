@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 
 // Create MySQL connection
 const db = mysql.createConnection({
-  host: 'todo-mysqldb',
-  user: 'root',
-  password: 'rootpassword',
+  host: 'db',
+  user: 'mysqluser',
+  password: process.env.MYSQL_PASSWORD,
   database: 'tododb',
 });
 

@@ -10,8 +10,6 @@ services:
       - db_data:/var/lib/mysql
       - "./schema:/docker-entrypoint-initdb.d"
     restart: always
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: tododb
@@ -35,15 +33,26 @@ services:
     networks:
       - todo-network
 
-  todoapi:
+  api:
     container_name: todo-api
     build: 
       context: ./api
+    ports:
+     - 5000:5000
+    environment:
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
     depends_on:
       - db
+    networks:
+      - todo-network
+
+  frontend:
+    container_name: todo-frontend
+    build: 
+      context: ./frontend
     ports:
-      - 5000:5000
+      - 3000:3000
     networks:
       - todo-network
 
