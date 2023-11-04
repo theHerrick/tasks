@@ -5,10 +5,8 @@ const app = express();
 // Cors
 app.use(cors());
 
-// Require the todoRoutes
-const todos = require('./api/todos'); // Adjust the path as needed
-
-// Start using the todo routes
+// Todo routes
+const todos = require('./api/todos');
 app.use('/', todos);
 
 // Start Express

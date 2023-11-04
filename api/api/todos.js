@@ -19,9 +19,8 @@ router.use(bodyParser.json());
 
 // GET Route
 router.get('/api/todos', (req, res) => {
-  const userEmail = req.query.user; // Get the user email from the query parameter
+  const userEmail = req.query.user;
 
-  // Use a prepared statement to prevent SQL injection
   const query = 'SELECT * FROM todo WHERE user = ?';
 
   connection.query(query, [userEmail], (err, rows) => {
