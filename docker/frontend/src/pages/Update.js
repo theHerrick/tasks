@@ -6,7 +6,7 @@ function Update() {
   const [id, setId] = useState('');
   const [task, setTask] = useState('');
   const [description, setDescription] = useState('');
-  const [message, setMessage] = useState(''); // State for the success message
+  const [message, setMessage] = useState('');
   const [data, setData] = useState([]);
 
   const handleSubmit = () => {
@@ -30,15 +30,12 @@ function Update() {
         return response.json();
       })
       .then((responseData) => {
-        // Handle the response data as needed
         console.log('PATCH request successful:', responseData);
-        setMessage('Task Updated!'); // Set the success message
+        setMessage('Task Updated!');
 
-        // Fetch updated data after successful update
         fetch('http://localhost:3002/api/todos')
           .then((response) => response.json())
           .then((responseData) => {
-            // Update the state with the data from the API response
             setData(responseData);
           })
           .catch((error) => {
@@ -51,11 +48,9 @@ function Update() {
   };
 
   useEffect(() => {
-    // Make an initial API call here to fetch the data
     fetch('http://localhost:3002/api/todos')
       .then((response) => response.json())
       .then((responseData) => {
-        // Update the state with the data from the API response
         setData(responseData);
       })
       .catch((error) => {
@@ -99,10 +94,8 @@ function Update() {
           </InputGroup>
 
           <Button variant="primary" type="button" onClick={handleSubmit}>
-            Submit
+            Update
           </Button>
-
-          {/* Display the success message */}
           {message && <p>{message}</p>}
         </Form>
       </div>

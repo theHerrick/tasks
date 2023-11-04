@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
+import { useAuth0 } from "@auth0/auth0-react";
 import TodoTable from '../components/TodoTable';
 
 function New() {
@@ -7,6 +8,7 @@ function New() {
   const [description, setDescription] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [data, setData] = useState([]);
+  const { user } = useAuth0();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,6 +16,7 @@ function New() {
     const postData = {
       title: task,
       body: description,
+      user: user.email
     };
 
     try {
@@ -30,7 +33,6 @@ function New() {
         setTask('');
         setDescription('');
 
-        // Fetch the latest data after a new task is added
         try {
           const response = await fetch('http://localhost:3002/api/todos');
           if (response.ok) {
@@ -51,7 +53,6 @@ function New() {
   };
 
   useEffect(() => {
-    // Fetch initial data when the component mounts
     fetch('http://localhost:3002/api/todos')
       .then((response) => response.json())
       .then((responseData) => {
@@ -88,7 +89,7 @@ function New() {
           </InputGroup>
 
           <Button variant="primary" type="submit">
-            Submit
+            Create
           </Button>
 
           {successMessage && <div className="text-success">{successMessage}</div>}

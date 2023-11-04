@@ -19,9 +19,12 @@ router.use(bodyParser.json());
 
 // GET Route
 router.get('/api/todos', (req, res) => {
-  const query = 'SELECT * FROM todo';
+  const userEmail = req.query.user; // Get the user email from the query parameter
 
-  connection.query(query, (err, rows) => {
+  // Use a prepared statement to prevent SQL injection
+  const query = 'SELECT * FROM todo WHERE user = ?';
+
+  connection.query(query, [userEmail], (err, rows) => {
     if (err) {
       console.error('Error executing MySQL query:', err);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -34,14 +37,14 @@ router.get('/api/todos', (req, res) => {
 
 // POST Route
 router.post('/api/todo', (req, res) => {
-  const { title, body } = req.body;
+  const { title, body, user } = req.body;
 
-  if (!title || !body) {
-    return res.status(400).json({ error: 'Both title and body are required' });
+  if (!title || !body || !user) {
+    return res.status(400).json({ error: 'Both title, body and user are required' });
   }
 
-  const query = 'INSERT INTO todo (title, body) VALUES (?, ?)';
-  const values = [title, body];
+  const query = 'INSERT INTO todo (title, body, user) VALUES (?, ?, ?)';
+  const values = [title, body, user];
 
   connection.query(query, values, (err, result) => {
     if (err) {

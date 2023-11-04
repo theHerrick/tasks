@@ -23,7 +23,6 @@ function Delete() {
 
   const handleDelete = async () => {
     if (!id) {
-      // Don't send a DELETE request if ID is empty
       return;
     }
 
@@ -35,10 +34,8 @@ function Delete() {
       });
 
       if (response.ok) {
-        // Handle a successful response
         setSuccessMessage('Task deleted');
-        setId(''); // Clear the input field
-        // Refresh data after a successful delete
+        setId('');
         fetchData();
       } else {
         console.error(`DELETE request to ${endpoint} failed`);
@@ -49,7 +46,7 @@ function Delete() {
   };
 
   useEffect(() => {
-    fetchData(); // Fetch data initially when the component mounts
+    fetchData();
   }, []);
 
   return (
