@@ -6,23 +6,33 @@ import Home from './pages/Home';
 import New from './pages/New';
 import Update from './pages/Update';
 import Delete from './pages/Delete';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
+import { Route, Routes } from "react-router-dom";
+import { AuthenticationGuard } from "./components/authentication-guard";
 
 function App() {
   return (
-    <Router>
       <div className="App">
         <CustomNavbar />
         <div className="container mt-5">
           <Routes>
+            <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
-            <Route path="/new" element={<New />} />
-            <Route path="/update" element={<Update />} />
-            <Route path="/delete" element={<Delete />} />
+            <Route
+              path="/new"
+              element={<AuthenticationGuard component={New} />}
+            />
+            <Route
+              path="/update"
+              element={<AuthenticationGuard component={Update} />}
+            />
+            <Route
+              path="/delete"
+              element={<AuthenticationGuard component={Delete} />}
+            />
           </Routes>
         </div>
       </div>
-    </Router>
   );
 }
 
