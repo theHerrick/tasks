@@ -1,7 +1,7 @@
 const dbConfig = {
     host: 'localhost',
     user: 'root',
-    password: 'adminpassword',
+    password: 'root',
     database: 'todo',
     port: 3306,
   };

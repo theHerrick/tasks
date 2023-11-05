@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import TodoTable from '../components/TodoTable';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function Update() {
   const [id, setId] = useState('');
@@ -8,9 +9,10 @@ function Update() {
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [data, setData] = useState([]);
+  const { user } = useAuth0();
 
   const handleSubmit = () => {
-    const url = `http://localhost:3002/api/todo/${id}`;
+    const url = `http://localhost:3002/api/todo/${id}?user=${user.email}`;
     const requestData = {
       title: task,
       body: description,
@@ -33,7 +35,8 @@ function Update() {
         console.log('PATCH request successful:', responseData);
         setMessage('Task Updated!');
 
-        fetch('http://localhost:3002/api/todos')
+        // Update the data after the task is updated
+        fetch(`http://localhost:3002/api/todos?user=${user.email}`)
           .then((response) => response.json())
           .then((responseData) => {
             setData(responseData);
@@ -48,7 +51,8 @@ function Update() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:3002/api/todos')
+    // Fetch the data with user email included in the URL
+    fetch(`http://localhost:3002/api/todos?user=${user.email}`)
       .then((response) => response.json())
       .then((responseData) => {
         setData(responseData);
@@ -56,7 +60,7 @@ function Update() {
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [user.email]); // Include user.email as a dependency
 
   return (
     <>

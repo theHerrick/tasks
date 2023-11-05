@@ -10,6 +10,8 @@ function New() {
   const [data, setData] = useState([]);
   const { user } = useAuth0();
 
+  const apiBaseUrl = 'http://localhost:3002/api';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -20,7 +22,7 @@ function New() {
     };
 
     try {
-      const response = await fetch('http://localhost:3002/api/todo', {
+      const response = await fetch(`${apiBaseUrl}/todo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +36,7 @@ function New() {
         setDescription('');
 
         try {
-          const response = await fetch('http://localhost:3002/api/todos');
+          const response = await fetch(`${apiBaseUrl}/todos?user=${user.email}`);
           if (response.ok) {
             const responseData = await response.json();
             setData(responseData);
@@ -53,7 +55,7 @@ function New() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:3002/api/todos')
+    fetch(`${apiBaseUrl}/todos?user=${user.email}`)
       .then((response) => response.json())
       .then((responseData) => {
         setData(responseData);
@@ -61,7 +63,7 @@ function New() {
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [user.email]);
 
   return (
     <>

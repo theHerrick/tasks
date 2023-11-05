@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import TodoTable from '../components/TodoTable';
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Delete() {
   const [id, setId] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [data, setData] = useState([]);
+  const { user } = useAuth0();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3002/api/todos');
+      // Fetch the data with user email included in the URL
+      const response = await fetch(`http://localhost:3002/api/todos?user=${user.email}`);
       if (response.ok) {
         const responseData = await response.json();
         setData(responseData);
@@ -19,7 +22,7 @@ function Delete() {
     } catch (error) {
       console.error('Network error:', error);
     }
-  };
+  }, [user.email]); // Include user.email as a dependency for useCallback
 
   const handleDelete = async () => {
     if (!id) {
@@ -47,7 +50,7 @@ function Delete() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]); // Include fetchData as a dependency for useEffect
 
   return (
     <>
