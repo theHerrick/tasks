@@ -1,11 +1,11 @@
-name: Copy DockerTest to Runner
+name: Tasks-Dev
 
 on:
   push:
-    paths:
-      - 'DockerTest/**'
     branches:
       - dev
+    paths:
+      - 'DockerTest/**'
 
 jobs:
   Copy to runner:
@@ -20,11 +20,10 @@ jobs:
       - name: Copy TestApp contents to Tasks-Dev
         run: cp -r DockerTest/testapp/. ~/tasks-dev
 
-  Build docker image:
+  Build Docker image:
     runs-on: self-hosted
     steps:
-      - name: Build docker image
-        uses: ~/tasks-dev
-
-      - name: Build docker image
-        run: docker build -f Dockerfile -t tasks-dev .
+    - name: Build Docker image
+      run: |
+        cd ~/tasks-dev
+        docker build -f DockerTest/testapp/Dockerfile -t tasks-dev .
