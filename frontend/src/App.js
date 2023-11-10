@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Form, InputGroup, Button, Table } from 'react-bootstrap';
 import NavBar from './components/NavBar';
-import { Table, Button } from 'react-bootstrap';
-import AddTask from './components/AddTask';
+
+const API_ENDPOINT = 'http://localhost:3002/api/tasks';
 
 function App() {
   const [data, setData] = useState([]);
   const [editingItemId, setEditingItemId] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -15,7 +18,7 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:3002/api/tasks');
+      const response = await fetch(API_ENDPOINT);
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -25,14 +28,14 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3002/api/tasks/`, {
+      await fetch(API_ENDPOINT, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ _id: id }),
       });
-
+  
       fetchData();
     } catch (error) {
       console.error('Error deleting item:', error);
@@ -48,8 +51,7 @@ function App() {
 
   const handleSaveEdit = async () => {
     try {
-      // Send PATCH request to update the item with the edited data
-      await fetch(`http://localhost:3002/api/tasks`, {
+      await fetch(API_ENDPOINT, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +63,6 @@ function App() {
         }),
       });
 
-      // Reset editing state and refresh the table data
       setEditingItemId(null);
       setEditedTitle('');
       setEditedDescription('');
@@ -77,16 +78,64 @@ function App() {
     setEditedDescription('');
   };
 
+  const handleAddTask = async () => {
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error adding task');
+      }
+
+      setTitle('');
+      setDescription('');
+      fetchData();
+    } catch (error) {
+      console.error('Error adding task:', error.message);
+    }
+  };
+
   return (
     <div className="App">
       <NavBar />
       <div className="container">
-        <AddTask />
+        <h2>New Task</h2>
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="basic-addon1">Title</InputGroup.Text>
+          <Form.Control
+            aria-label="Title"
+            aria-describedby="basic-addon1"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </InputGroup>
+
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="basic-addon2">Description</InputGroup.Text>
+          <Form.Control
+            aria-label="Description"
+            aria-describedby="basic-addon2"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </InputGroup>
+
+        <Button variant="success" onClick={handleAddTask}>
+          Add
+        </Button>{' '}
+
         <h2>Current Tasks</h2>
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Title</th>
               <th>Description</th>
               <th>Action</th>
@@ -95,7 +144,6 @@ function App() {
           <tbody>
             {data.map((item) => (
               <tr key={item._id}>
-                <td>{item._id}</td>
                 <td>
                   {editingItemId === item._id ? (
                     <input
@@ -130,11 +178,11 @@ function App() {
                     </>
                   ) : (
                     <>
-                      <Button variant="danger" onClick={() => handleDelete(item._id)}>
-                        Delete
-                      </Button>{' '}
                       <Button variant="info" onClick={() => handleEdit(item._id)}>
                         Edit
+                      </Button>{' '}
+                      <Button variant="danger" onClick={() => handleDelete(item._id)}>
+                        Delete
                       </Button>
                     </>
                   )}
