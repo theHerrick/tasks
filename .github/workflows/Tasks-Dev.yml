@@ -23,12 +23,19 @@ jobs:
   build_docker_image:
     runs-on: self-hosted
     steps:
+    - name: Check if container is running
+      id: check_container
+      run: echo ::set-output name=CONTAINER_RUNNING::$(docker inspect --format="{{.State.Running}}" tasks-dev 2>/dev/null || echo "false")
+
     - name: Build Docker image
       run: |
         cd ~/tasks-dev
         docker build -f Dockerfile -t tasks-dev .
+
     - name: Start container
       run: |
-        docker stop tasks-dev
-        sleep 10
+        if [ "${{ steps.check_container.outputs.CONTAINER_RUNNING }}" == "true" ]; then
+          docker stop tasks-dev
+          sleep 10
+        fi
         docker run -it --rm -d --name tasks-dev -p 8082:80 tasks-dev
