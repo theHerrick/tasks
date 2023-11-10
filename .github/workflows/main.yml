@@ -1,0 +1,18 @@
+name: Copy DockerTest to Runner
+
+on:
+  push:
+    paths:
+      - 'DockerTest/**'
+    branches:
+      - dev
+
+jobs:
+  copy-to-runner:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Copy DockerTest contents to Tasks-Dev
+        run: cp -r DockerTest/. ~/tasks-dev
