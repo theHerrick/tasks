@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Clean Tasks-Dev
-        uses: rm -r ~/tasks-dev/*
+        run: rm -r ~/tasks-dev/*
 
       - name: Copy TestApp contents to Tasks-Dev
         run: cp -r DockerTest/testapp/. ~/tasks-dev
