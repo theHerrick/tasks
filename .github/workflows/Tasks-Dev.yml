@@ -26,4 +26,4 @@ jobs:
     - name: Build Docker image
       run: |
         cd ~/tasks-dev
-        docker build -f DockerTest/testapp/Dockerfile -t tasks-dev .
+        docker build -f Dockerfile -t tasks-dev .
