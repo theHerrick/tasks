@@ -14,5 +14,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Copy DockerTest contents to Tasks-Dev
-        run: cp -r DockerTest/. ~/tasks-dev
+      - name: Clean Tasks-Dev
+        uses: rm -r ~/tasks-dev/*
+
+      - name: Copy TestApp contents to Tasks-Dev
+        run: cp -r DockerTest/testapp/. ~/tasks-dev
+
+      - name: Build docker image
+        run: docker build -f ~/tasks-dev/Dockerfile -t tasks-dev .
