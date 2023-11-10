@@ -27,3 +27,7 @@ jobs:
       run: |
         cd ~/tasks-dev
         docker build -f Dockerfile -t tasks-dev .
+    - name: Start container
+      run: |
+        docker stop tasks-dev
+        docker run -it --rm -d --name tasks-dev -p 8082:80 tasks-dev
