@@ -30,4 +30,5 @@ jobs:
     - name: Start container
       run: |
         docker stop tasks-dev
+        sleep 10
         docker run -it --rm -d --name tasks-dev -p 8082:80 tasks-dev
