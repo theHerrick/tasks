@@ -1,19 +1,21 @@
+// src/DarkNavbar.js
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
-function CustomNavbar() {
+const NavBar = () => {
   return (
-    <Navbar bg="dark" variant="dark">
-      <Navbar.Brand as={Link} to="/">Todo</Navbar.Brand>
-      <Nav className="ml-auto">
-        <Nav.Link as={Link} to="/">Home</Nav.Link>
-        <Nav.Link as={Link} to="/new">New</Nav.Link>
-        <Nav.Link as={Link} to="/update">Update</Nav.Link>
-        <Nav.Link as={Link} to="/delete">Delete</Nav.Link>
-      </Nav>
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar.Brand href="#home">Tasks</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav.Link href="#home">Home</Nav.Link>
+          <Nav.Link href="#link">Link</Nav.Link>
+          <Nav.Link href="#about">About</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
     </Navbar>
   );
-}
+};
 
-export default CustomNavbar;
+export default NavBar;
