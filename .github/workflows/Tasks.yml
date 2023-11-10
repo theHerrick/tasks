@@ -1,0 +1,34 @@
+name: Tasks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'DockerTest/**'
+
+jobs:
+  copy_to_runner:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Clean Tasks-Dev
+        run: rm -r ~/tasks/*
+
+      - name: Copy TestApp contents to Tasks
+        run: cp -r DockerTest/testapp/. ~/tasks
+
+  build_docker_image:
+    runs-on: self-hosted
+    steps:
+    - name: Build Docker image
+      run: |
+        cd ~/tasks
+        docker build -f Dockerfile -t tasks .
+    - name: Start container
+      run: |
+        docker stop tasks
+        sleep 10
+        docker run -it --rm -d --name tasks -p 8081:80 tasks
