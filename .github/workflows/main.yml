@@ -8,7 +8,7 @@ on:
       - dev
 
 jobs:
-  copy-to-runner:
+  Copy to runner:
     runs-on: self-hosted
     steps:
       - name: Checkout Repository
@@ -20,5 +20,11 @@ jobs:
       - name: Copy TestApp contents to Tasks-Dev
         run: cp -r DockerTest/testapp/. ~/tasks-dev
 
+  Build docker image:
+    runs-on: self-hosted
+    steps:
       - name: Build docker image
-        run: docker build -f ~/tasks-dev/Dockerfile -t tasks-dev .
+        uses: ~/tasks-dev
+
+      - name: Build docker image
+        run: docker build -f Dockerfile -t tasks-dev .
