@@ -11,16 +11,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Clean Tasks-Dev
         run: rm -r ~/tasks-dev/*
-
       - name: Copy API to Tasks-Dev
         run: cp -r api/. ~/tasks-dev/api/
-
       - name: Copy UI to Tasks-Dev
         run: cp -r frontend/. ~/tasks-dev/frontend/
-
       - name: Copy Docker Compose to Tasks-Dev
         run: cp docker-compose.yml ~/tasks-dev/
     
@@ -30,8 +26,10 @@ jobs:
     steps:
       - name: Copy docker envs
         run: cp ~/tasks-envs/.env-dev ~/tasks-dev/.env
-      - name: Copy frontend envs
-        run: cp ~/tasks-envs/ui/.env-dev ~/tasks-dev/frontend/.env
+      - name: Copy API envs
+        run: cp ~/tasks-envs/api/.env-dev ~/tasks-dev/api/.env
+      - name: Copy UI Dockerfile
+        run: cp -rf ~/tasks-envs/ui/Dockerfile-dev ~/tasks-dev/ui/Dockerfile
 
   build_compose:
     runs-on: self-hosted
