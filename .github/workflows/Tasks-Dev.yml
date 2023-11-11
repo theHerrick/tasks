@@ -23,3 +23,9 @@ jobs:
 
       - name: Copy Docker Compose to Tasks-Dev
         run: cp docker-compose.yml ~/tasks-dev/
+    
+  copy_envs_to_local:
+    runs-on: self-hosted
+    steps:
+      - name: Copy docker envs
+        run: cp ~/tasks-envs/.env-dev ~/tasks-dev/.env
