@@ -26,6 +26,7 @@ jobs:
     
   copy_envs_to_local:
     runs-on: self-hosted
+    needs: copy_src_to_runner
     steps:
       - name: Copy docker envs
         run: cp ~/tasks-envs/.env-dev ~/tasks-dev/.env
