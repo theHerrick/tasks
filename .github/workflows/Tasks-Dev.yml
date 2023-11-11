@@ -30,4 +30,4 @@ jobs:
       - name: Copy docker envs
         run: cp ~/tasks-envs/.env-dev ~/tasks-dev/.env
       - name: Copy frontend envs
-        run: cp ~/tasks-envs/ui/.env-dev ~/frontend/.env
+        run: cp ~/tasks-envs/ui/.env-dev ~/tasks-dev/frontend/.env
