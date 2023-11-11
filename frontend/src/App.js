@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, InputGroup, Button, Table } from 'react-bootstrap';
 import NavBar from './components/NavBar';
 
-const API_ENDPOINT = 'http://localhost:3002/api/tasks';
+const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
 function App() {
   const [data, setData] = useState([]);

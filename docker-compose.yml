@@ -1,0 +1,33 @@
+version: '3'
+services:
+  db:
+    container_name: tasks-db
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    restart: always
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER}
+      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASS}
+    volumes:
+      - type: bind
+        source: ${MONGODB_DATA_PATH}
+        target: /data/db
+      - ${MONGODB_INIT_PATH}:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  api:
+    container_name: tasks-api
+    build:
+      context: ./api
+    depends_on:
+      - db
+    environment:
+      - WAIT_HOSTS=db:27017
+      - CONNECTION_STRING=${API_CONNECTION_STRING}
+    ports:
+      - ${API_PORTS}
+  ui:
+    container_name: tasks-ui
+    build:
+      context: ./frontend
+    depends_on:
+      - api
+    ports:
+      - ${UI_PORTS}

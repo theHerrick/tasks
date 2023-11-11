@@ -1,7 +1,8 @@
 # build environment
-FROM node:13.12.0-alpine as build
+FROM node:21-alpine3.17 as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
+ENV REACT_APP_API_ENDPOINT http://localhost:3002/api/tasks
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm ci --silent
