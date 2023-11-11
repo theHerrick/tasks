@@ -32,3 +32,9 @@ jobs:
         run: cp ~/tasks-envs/.env-dev ~/tasks-dev/.env
       - name: Copy frontend envs
         run: cp ~/tasks-envs/ui/.env-dev ~/tasks-dev/frontend/.env
+
+  build_compose:
+    runs-on: self-hosted
+    steps:
+    - name: Run docker-compose
+      run: docker-compose --env-file .env up
