@@ -37,5 +37,7 @@ jobs:
     runs-on: self-hosted
     needs: copy_envs_to_local
     steps:
-    - name: Run docker-compose
-      run: docker-compose --env-file .env up
+    - name: Build Docker image
+      run: |
+        cd ~/tasks-dev
+        docker-compose --env-file .env up
