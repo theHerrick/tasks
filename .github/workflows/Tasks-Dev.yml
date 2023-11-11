@@ -29,7 +29,7 @@ jobs:
       - name: Copy API envs
         run: cp ~/tasks-envs/api/.env-dev ~/tasks-dev/api/.env
       - name: Copy UI Dockerfile
-        run: cp -rf ~/tasks-envs/ui/Dockerfile-dev ~/tasks-dev/ui/Dockerfile
+        run: cp -rf ~/tasks-envs/ui/Dockerfile-dev ~/tasks-dev/frontend/Dockerfile
 
   build_compose:
     runs-on: self-hosted
